@@ -4,7 +4,6 @@ import { z } from "zod"
 
 const UpdateChoice = z.object({
   id: z.number(),
-  text: z.string(),
 })
 
 export default resolver.pipe(
@@ -12,7 +11,7 @@ export default resolver.pipe(
   resolver.authorize(),
   async ({ id, ...data }) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const choice = await db.choice.update({ where: { id }, data })
+    const choice = await db.choice.update({ where: { id }, data: { votes: { increment: 1 } } })
 
     return choice
   }
