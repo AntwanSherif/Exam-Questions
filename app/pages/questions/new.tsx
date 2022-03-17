@@ -1,8 +1,10 @@
-import { Link, useRouter, useMutation, BlitzPage, Routes } from "blitz"
+import { useRouter, useMutation, BlitzPage, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import createQuestion from "app/questions/mutations/createQuestion"
 import { QuestionForm, FORM_ERROR } from "app/questions/components/QuestionForm"
 import { createQuestionSchema } from "app/questions/validations"
+import { Box, Heading } from "@chakra-ui/react"
+import { Link } from "app/core/components/Link"
 
 const NewQuestionPage: BlitzPage = () => {
   const router = useRouter()
@@ -10,7 +12,9 @@ const NewQuestionPage: BlitzPage = () => {
 
   return (
     <div>
-      <h1>Create New Question</h1>
+      <Box my={5}>
+        <Heading as="h1">Create New Question</Heading>
+      </Box>
 
       <QuestionForm
         submitText="Create Question"
@@ -29,11 +33,9 @@ const NewQuestionPage: BlitzPage = () => {
         }}
       />
 
-      <p>
-        <Link href={Routes.QuestionsPage()}>
-          <a>Questions</a>
-        </Link>
-      </p>
+      <Box mt={5}>
+        <Link href={Routes.QuestionsPage()}>Go back to Questions</Link>
+      </Box>
     </div>
   )
 }

@@ -1,6 +1,7 @@
+import { Container } from "@chakra-ui/react"
 import { Head, BlitzLayout } from "blitz"
 
-const Layout: BlitzLayout<{title?: string}> = ({ title, children }) => {
+const Layout: BlitzLayout<{ title?: string }> = ({ title, children }) => {
   return (
     <>
       <Head>
@@ -8,7 +9,7 @@ const Layout: BlitzLayout<{title?: string}> = ({ title, children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {children}
+      <Container maxW="container.xl">{children}</Container>
     </>
   )
 }
