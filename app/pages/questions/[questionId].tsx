@@ -1,9 +1,12 @@
 import { Suspense } from "react"
-import { Head, Link, useRouter, useQuery, useParam, BlitzPage, useMutation, Routes } from "blitz"
+import { Head, useRouter, useQuery, useParam, BlitzPage, useMutation, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getQuestion from "app/questions/queries/getQuestion"
 import deleteQuestion from "app/questions/mutations/deleteQuestion"
 import updateChoice from "app/choices/mutations/updateChoice"
+import { Button, ButtonGroup, Heading, ListItem, UnorderedList } from "@chakra-ui/react"
+import { Link } from "app/core/components/Link"
+import { Box } from "@chakra-ui/react"
 
 export const Question = () => {
   const router = useRouter()
@@ -11,6 +14,13 @@ export const Question = () => {
   const [updateChoiceMutation] = useMutation(updateChoice)
   const [deleteQuestionMutation] = useMutation(deleteQuestion)
   const [question, { refetch }] = useQuery(getQuestion, { id: questionId })
+
+  const handleDelete = async () => {
+    if (window.confirm("This will be deleted")) {
+      await deleteQuestionMutation({ id: question.id })
+      router.push(Routes.QuestionsPage())
+    }
+  }
 
   const handleVote = async (id: number) => {
     try {
@@ -28,32 +38,30 @@ export const Question = () => {
       </Head>
 
       <div>
-        <h1>{question.text}</h1>
-        <ul>
+        <Box my={5}>
+          <Heading as="h1">{question.text}</Heading>
+        </Box>
+
+        <UnorderedList>
           {question.choices.map((choice) => (
-            <li key={choice.id}>
+            <ListItem key={choice.id}>
               {choice.text} - {choice.votes} votes
               <button onClick={() => handleVote(choice.id)}>Vote</button>
-            </li>
+            </ListItem>
           ))}
-        </ul>
+        </UnorderedList>
 
-        <Link href={Routes.EditQuestionPage({ questionId: question.id })}>
-          <a>Edit</a>
-        </Link>
+        <Box mt={10}>
+          <ButtonGroup variant="outline" spacing="2">
+            <Button width="80px" colorScheme="blue">
+              <Link href={Routes.EditQuestionPage({ questionId: question.id })}>Edit</Link>
+            </Button>
 
-        <button
-          type="button"
-          onClick={async () => {
-            if (window.confirm("This will be deleted")) {
-              await deleteQuestionMutation({ id: question.id })
-              router.push(Routes.QuestionsPage())
-            }
-          }}
-          style={{ marginLeft: "0.5rem" }}
-        >
-          Delete
-        </button>
+            <Button colorScheme="red" width="80px" onClick={handleDelete}>
+              Delete
+            </Button>
+          </ButtonGroup>
+        </Box>
       </div>
     </>
   )
@@ -63,9 +71,7 @@ const ShowQuestionPage: BlitzPage = () => {
   return (
     <div>
       <p>
-        <Link href={Routes.QuestionsPage()}>
-          <a>Questions</a>
-        </Link>
+        <Link href={Routes.QuestionsPage()}>Questions</Link>
       </p>
 
       <Suspense fallback={<div>Loading...</div>}>

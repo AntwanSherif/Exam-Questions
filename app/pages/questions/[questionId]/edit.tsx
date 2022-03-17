@@ -1,9 +1,11 @@
 import { Suspense } from "react"
-import { Head, Link, useRouter, useQuery, useMutation, useParam, BlitzPage, Routes } from "blitz"
+import { Head, useRouter, useQuery, useMutation, useParam, BlitzPage, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getQuestion from "app/questions/queries/getQuestion"
 import updateQuestion from "app/questions/mutations/updateQuestion"
 import { QuestionForm, FORM_ERROR } from "app/questions/components/QuestionForm"
+import { Box, Heading } from "@chakra-ui/react"
+import { Link } from "app/core/components/Link"
 
 export const EditQuestion = () => {
   const router = useRouter()
@@ -25,8 +27,9 @@ export const EditQuestion = () => {
       </Head>
 
       <div>
-        <h1>Edit Question {question.id}</h1>
-        <pre>{JSON.stringify(question, null, 2)}</pre>
+        <Box my={5}>
+          <Heading as="h1">Edit Question {question.id}</Heading>
+        </Box>
 
         <QuestionForm
           submitText="Update Question"
@@ -63,11 +66,9 @@ const EditQuestionPage: BlitzPage = () => {
         <EditQuestion />
       </Suspense>
 
-      <p>
-        <Link href={Routes.QuestionsPage()}>
-          <a>Questions</a>
-        </Link>
-      </p>
+      <Box mt={5}>
+        <Link href={Routes.QuestionsPage()}>Go back to Questions</Link>
+      </Box>
     </div>
   )
 }
